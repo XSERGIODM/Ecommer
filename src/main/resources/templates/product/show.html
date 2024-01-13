@@ -48,17 +48,18 @@
         <th scope="col">Inventario</th>
         <th scope="col">Precio</th>
         <th scope="col">Acción</th>
-        <th scope="col">Acción</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td ></td>
-        <td ></td>
-        <td ></td>
-        <td ></td>
-        <td><a  class="btn btn-warning" href="">Editar</a> </td>
-        <td><a  class="btn btn-danger" href="">Eliminar</a> </td>
+      <tr th:each="producto:${productos}">
+        <td th:text="${producto.getNombre()}"></td>
+        <td th:text="${producto.getDescripcion()}"></td>
+        <td th:text="${producto.getCantidad()}"></td>
+        <td th:text="${producto.getPrecio()}"></td>
+        <td>
+          <a  class="btn btn-warning" href="">Editar</a>
+          <a class="btn btn-danger" th:href="@{'/productos/delete/' + ${producto.getId()}}">Eliminar</a>
+        </td>
       </tr>       
     </tbody>
   </table>
