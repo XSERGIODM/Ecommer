@@ -1,9 +1,6 @@
 package com.app.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,4 +22,13 @@ public class Orden {
     LocalDateTime fechaCreacion;
     LocalDateTime fechaRecibido;
     Double total;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "detalle_orden_id", unique = true)
+    private DetalleOrden detalleOrden;
+
 }

@@ -1,9 +1,6 @@
 package com.app.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +20,12 @@ public class DetalleOrden {
     Integer cantidad;
     Double precio;
     Double total;
+
+    @ManyToOne
+    @JoinColumn(name = "producto_id")
+    private Producto producto;
+
+    @OneToOne(mappedBy = "detalleOrden", orphanRemoval = true)
+    private Orden orden;
+
 }
