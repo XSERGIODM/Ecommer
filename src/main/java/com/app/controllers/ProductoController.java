@@ -40,6 +40,12 @@ public class ProductoController {
         return "redirect:/productos";
     }
 
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable(name = "id") Integer id, Model model) {
+        model.addAttribute("producto", productoService.findById(id));
+        return "product/edit";
+    }
+
     @PostMapping("/save")
     public String save(Producto producto) {
         Usuario usuario = new Usuario();
@@ -47,6 +53,16 @@ public class ProductoController {
         producto.setUsuario(usuario);
         log.info("Producto: {}", producto);
         productoService.save(producto);
+        return "redirect:/productos";
+    }
+
+    @PostMapping("/update")
+    public String update(Producto producto) {
+        Usuario usuario = new Usuario();
+        usuario.setId(1);
+        producto.setUsuario(usuario);
+        log.info("Producto: {}", producto);
+        productoService.update(producto);
         return "redirect:/productos";
     }
 }
