@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 @Service
 public class UploadFileService {
     private final String folder="images//";
+
     public String saveImage(MultipartFile file) throws IOException {
         if (!file.isEmpty()){
             byte[] bytes = file.getBytes();
@@ -25,8 +26,9 @@ public class UploadFileService {
     }
 
     public void deleteImage(String nombre){
-        String ruta = folder;
-        File file = new File(ruta+nombre);
-        file.delete();
+        if(!nombre.equals("default.jpg")){
+            File file = new File(folder+nombre);
+            file.delete();
+        }
     }
 }
