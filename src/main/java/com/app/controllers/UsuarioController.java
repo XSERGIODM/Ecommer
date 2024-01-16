@@ -1,6 +1,7 @@
 package com.app.controllers;
 
 import com.app.models.Usuario;
+import com.app.services.IOrdenService;
 import com.app.services.IUsuarioService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
@@ -24,6 +25,7 @@ import java.util.Optional;
 public class UsuarioController {
 
     IUsuarioService usuarioService;
+    IOrdenService ordenService;
 
     @GetMapping("/registro")
     public String registro(){
@@ -37,6 +39,7 @@ public class UsuarioController {
 
     @GetMapping("/compras")
     public String compras(HttpSession session, Model model){
+        model.addAttribute("listaOrdenes", ordenService.findByUsuario_Id((Integer) session.getAttribute("usuarioId")));
         model.addAttribute("sessionModel", session.getAttribute("usuarioId"));
         return "user/compras";
     }

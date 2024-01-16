@@ -43,4 +43,9 @@ public class OrdenServiceImpl implements IOrdenService {
         numeroConcatenado = String.format("%010d", numero);
         return numeroConcatenado;
     }
+
+    @Override
+    public List<Orden> findByUsuario_Id(Integer id) {
+        return ordenRepository.findByUsuario_Id(id);
+    }
 }
