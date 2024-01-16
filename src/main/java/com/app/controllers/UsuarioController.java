@@ -47,6 +47,12 @@ public class UsuarioController {
         return "user/detalleCompra";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute("usuarioId");
+        session.invalidate();
+        return "redirect:/";
+    }
 
     @PostMapping("/save")
     public String save(Usuario usuario){
@@ -57,11 +63,8 @@ public class UsuarioController {
 
     @PostMapping("/acceder")
     public String acceder(Usuario usuario, HttpSession session){
-
-        log.info("Acceso: {}", usuario);
         Optional<Usuario> optionalUsuario = usuarioService.findByEmailIgnoreCase(usuario.getEmail());
-        //sin validar la clave aun, si esta el email y dependiendo el tipo me mande a una vista u otra
-        if(optionalUsuario.isPresent()){
+         if(optionalUsuario.isPresent()){
             Usuario usuarioEncontrado = optionalUsuario.get();
             session.setAttribute("usuarioId", usuarioEncontrado.getId());
             if(usuarioEncontrado.getTipo().equals("ADMIN")){
