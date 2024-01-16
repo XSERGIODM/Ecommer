@@ -3,7 +3,9 @@ package com.app.controllers;
 import com.app.models.Producto;
 import com.app.models.Usuario;
 import com.app.services.IProductoService;
+import com.app.services.IUsuarioService;
 import com.app.services.UploadFileService;
+import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +26,7 @@ public class ProductoController {
 
     IProductoService productoService;
     UploadFileService uploadFileService;
+    IUsuarioService usuarioService;
 
     @GetMapping("")
     public String show(Model model) {
@@ -51,21 +54,18 @@ public class ProductoController {
     }
 
     @PostMapping("/save")
-    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
-        Usuario usuario = new Usuario();
-        usuario.setId(1);
-        producto.setUsuario(usuario);
+    public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
+        int id = (int) session.getAttribute("usuarioId");
+        producto.setUsuario(usuarioService.findById(id).get());
         producto.setImagen(uploadFileService.saveImage(file));
-        log.info("Producto: {}", producto);
         productoService.save(producto);
         return "redirect:/productos";
     }
 
     @PostMapping("/update")
-    public String update(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
-        Usuario usuario = new Usuario();
-        usuario.setId(1);
-        producto.setUsuario(usuario);
+    public String update(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
+        int id = (int) session.getAttribute("usuarioId");
+        producto.setUsuario(usuarioService.findById(id).get());
         if (file.isEmpty()) {
             Producto producto1 = productoService.findById(producto.getId()).get();
             producto.setImagen(producto1.getImagen());
@@ -73,7 +73,6 @@ public class ProductoController {
             producto.setImagen(uploadFileService.saveImage(file));
             uploadFileService.deleteImage(producto.getImagen());
         }
-        log.info("Producto: {}", producto);
         productoService.update(producto);
         return "redirect:/productos";
     }

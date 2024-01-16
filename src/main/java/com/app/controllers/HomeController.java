@@ -8,6 +8,7 @@ import com.app.services.IDestalleOrdenService;
 import com.app.services.IOrdenService;
 import com.app.services.IProductoService;
 import com.app.services.IUsuarioService;
+import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,8 @@ public class HomeController {
 
 
     @GetMapping("")
-    public String home(Model model) {
+    public String home(Model model, HttpSession session) {
+        log.info("Session: {}", session.getAttribute("usuarioId"));
         model.addAttribute("listaProducto", productoService.findAll());
         return "user/home";
     }
@@ -80,20 +82,22 @@ public class HomeController {
     }
 
     @GetMapping("/order")
-    public String order(Model model) {
+    public String order(Model model, HttpSession session) {
+        int usuarioId = (int) session.getAttribute("usuarioId");
         model.addAttribute("listaDetalleOrden", detalleOrdenList);
         model.addAttribute("orden", orden);
-        model.addAttribute("usuario", usuarioService.findById(1).get());
+        model.addAttribute("usuario", usuarioService.findById(usuarioId).get());
         return "user/resumenOrden";
     }
 
     @GetMapping("/saveOrder")
-    public String saveOrder() {
+    public String saveOrder(HttpSession session) {
         if (!detalleOrdenList.isEmpty()){
             orden.setFechaCreacion(LocalDateTime.now());
             orden.setNumero(ordenService.generarNUmeroOrden());
 
-            Usuario usuario = usuarioService.findById(1).get();
+            int usuarioId = (int) session.getAttribute("usuarioId");
+            Usuario usuario = usuarioService.findById(usuarioId).get();
             orden.setUsuario(usuario);
 
             ordenService.save(orden);
