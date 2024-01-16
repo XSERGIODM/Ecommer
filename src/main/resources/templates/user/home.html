@@ -41,10 +41,12 @@
                 <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.getImagen()})}" alt="">
                 <div class="card-body">
                     <p class="card-text" th:text="${producto.getNombre()}"></p>
-                    <p class="card-text" th:text="${producto.getPrecio()}"></p>
+                    <p class="card-text" th:text="'Precio: $'+${#numbers.formatDecimal(producto.getPrecio(), 1, 'COMMA', 2, 'POINT')}"></p>
                 </div>
                 <div class="card-footer">
-                    <a href="productohome.html" class="btn btn-success">Ver producto</a>
+                    <a th:href="@{/productoHome/{id} (id= ${producto.getId()})}" class="btn btn-success">
+                        Ver producto
+                    </a>
                 </div>
             </div>
         </div>

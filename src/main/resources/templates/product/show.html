@@ -55,7 +55,7 @@
         <td th:text="${producto.getNombre()}"></td>
         <td th:text="${producto.getDescripcion()}"></td>
         <td th:text="${producto.getCantidad()}"></td>
-        <td th:text="${producto.getPrecio()}"></td>
+        <td th:text="'$'+${#numbers.formatDecimal(producto.getPrecio(), 1, 'COMMA', 2, 'POINT')}"></td>
         <td>
           <a  class="btn btn-warning" th:href="@{/productos/edit/{id} (id=${producto.getId()})}">Editar</a>
           <a class="btn btn-danger" th:href="@{/productos/delete/{id} (id=${producto.getId()})}">Eliminar</a>
