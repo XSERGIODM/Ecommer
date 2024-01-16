@@ -1,7 +1,7 @@
 package com.app.services;
 
 import com.app.models.Producto;
-import com.app.repositories.ProductoRepository;
+import com.app.repositories.IProductoRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,30 +15,30 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ProductoServiceImpl implements IProductoService{
 
-    ProductoRepository productoRepository;
+    IProductoRepository IProductoRepository;
 
     @Override
     public Producto save(Producto producto) {
-        return productoRepository.save(producto);
+        return IProductoRepository.save(producto);
     }
 
     @Override
     public Optional<Producto> findById(Integer id) {
-        return productoRepository.findById(id);
+        return IProductoRepository.findById(id);
     }
 
     @Override
     public void update(Producto producto) {
-        productoRepository.save(producto);
+        IProductoRepository.save(producto);
     }
 
     @Override
     public void delete(Integer id) {
-        productoRepository.deleteById(id);
+        IProductoRepository.deleteById(id);
     }
 
     @Override
     public List<Producto> findAll() {
-        return productoRepository.findAll();
+        return IProductoRepository.findAll();
     }
 }
