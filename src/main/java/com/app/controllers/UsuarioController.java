@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,12 @@ public class UsuarioController {
     @GetMapping("/login")
     public String login(){
         return "user/login";
+    }
+
+    @GetMapping("/compras")
+    public String compras(HttpSession session, Model model){
+        model.addAttribute("sessionModel", session.getAttribute("usuarioId"));
+        return "user/compras";
     }
 
     @PostMapping("/save")
