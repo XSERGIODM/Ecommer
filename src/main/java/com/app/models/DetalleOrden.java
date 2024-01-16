@@ -1,10 +1,7 @@
 package com.app.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @AllArgsConstructor
@@ -21,10 +18,12 @@ public class DetalleOrden {
     Double precio;
     Double total;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "producto_id")
     private Producto producto;
 
+    @ToString.Exclude
     @OneToOne(mappedBy = "detalleOrden", orphanRemoval = true)
     private Orden orden;
 

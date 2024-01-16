@@ -1,10 +1,7 @@
 package com.app.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
@@ -27,9 +24,11 @@ public class Usuario {
     String telefono;
     String tipo;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "usuario", orphanRemoval = true)
     private List<Producto> productos = new ArrayList<>();
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "usuario", orphanRemoval = true)
     private List<Orden> ordenes = new ArrayList<>();
 

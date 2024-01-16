@@ -1,10 +1,7 @@
 package com.app.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @AllArgsConstructor
@@ -24,6 +21,7 @@ public class Producto {
     Double precio;
     Integer cantidad;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
