@@ -19,6 +19,7 @@ public class Usuario {
     Integer id;
     String nombre;
     String username;
+    String password;
     String email;
     String direccion;
     String telefono;

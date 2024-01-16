@@ -15,10 +15,20 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UsuarioServiceImpl implements IUsuarioService {
 
-    IUsuarioRepository IUsuarioRepository;
+    IUsuarioRepository usuarioRepository;
 
     @Override
     public Optional<Usuario> findById(Integer id) {
-        return IUsuarioRepository.findById(id);
+        return usuarioRepository.findById(id);
+    }
+
+    @Override
+    public Usuario save(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public Optional<Usuario> findByEmailIgnoreCase(String email) {
+        return usuarioRepository.findByEmailIgnoreCase(email);
     }
 }
