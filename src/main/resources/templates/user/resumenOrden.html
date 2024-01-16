@@ -83,7 +83,7 @@
                     <h2 class="card-title">Resumen Orden</h2>
                     <ul class="list-group">
                         <li class="list-group-item"><h5 th:text="'Total: $'+${#numbers.formatDecimal(orden.getTotal(), 1, 'COMMA', 2, 'POINT')}"></h5></li>
-                        <a href="#" class="btn btn-dark">Generar</a>
+                        <a th:href="@{/saveOrder}" class="btn btn-dark">Generar</a>
                     </ul>
                 </div>
             </div>

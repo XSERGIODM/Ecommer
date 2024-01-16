@@ -3,6 +3,9 @@ package com.app.controllers;
 import com.app.models.DetalleOrden;
 import com.app.models.Orden;
 import com.app.models.Producto;
+import com.app.models.Usuario;
+import com.app.services.IDestalleOrdenService;
+import com.app.services.IOrdenService;
 import com.app.services.IProductoService;
 import com.app.services.IUsuarioService;
 import lombok.AccessLevel;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +27,16 @@ public class HomeController {
 
     final IProductoService productoService;
     final IUsuarioService usuarioService;
+    final IOrdenService ordenService;
+    final IDestalleOrdenService detalleOrdenService;
     List<DetalleOrden> detalleOrdenList = new ArrayList<>();
-    final Orden orden = new Orden();
+    Orden orden = new Orden();
 
-    public HomeController(IProductoService productoService, IUsuarioService usuarioService) {
+    public HomeController(IProductoService productoService, IUsuarioService usuarioService, IOrdenService ordenService, IDestalleOrdenService detalleOrdenService) {
         this.productoService = productoService;
         this.usuarioService = usuarioService;
+        this.ordenService = ordenService;
+        this.detalleOrdenService = detalleOrdenService;
         orden.setTotal(0.0);
     }
 
@@ -79,11 +87,34 @@ public class HomeController {
         return "user/resumenOrden";
     }
 
+    @GetMapping("/saveOrder")
+    public String saveOrder() {
+        if (!detalleOrdenList.isEmpty()){
+            orden.setFechaCreacion(LocalDateTime.now());
+            orden.setNumero(ordenService.generarNUmeroOrden());
+
+            Usuario usuario = usuarioService.findById(1).get();
+            orden.setUsuario(usuario);
+
+            ordenService.save(orden);
+
+            detalleOrdenList.forEach(detalleOrden -> {
+                detalleOrden.setOrden(orden);
+                detalleOrdenService.save(detalleOrden);
+            });
+
+            detalleOrdenList = new ArrayList<>();
+            orden = new Orden();
+            orden.setTotal(0.0);
+        }
+        return "redirect:/";
+    }
+
     @PostMapping("/cart")
     public String addCart(@RequestParam Integer id, @RequestParam Integer cantidad, Model model) {
         DetalleOrden detalleOrden = new DetalleOrden();
         Producto producto = productoService.findById(id).get();
-        double sumaTotal = 0;
+        double sumaTotal;
 
         detalleOrden.setCantidad(cantidad);
         detalleOrden.setPrecio(producto.getPrecio());
