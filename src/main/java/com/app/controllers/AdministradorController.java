@@ -1,5 +1,6 @@
 package com.app.controllers;
 
+import com.app.services.IOrdenService;
 import com.app.services.IProductoService;
 import com.app.services.IUsuarioService;
 import lombok.AccessLevel;
@@ -20,6 +21,7 @@ public class AdministradorController {
 
     IProductoService productoService;
     IUsuarioService usuarioService;
+    IOrdenService ordenService;
 
     @GetMapping("")
     public String home(Model model) {
@@ -31,5 +33,11 @@ public class AdministradorController {
     public String usuarios(Model model) {
         model.addAttribute("listaUsuario", usuarioService.findAll());
         return "admin/usuarios";
+    }
+
+    @GetMapping("/ordenes")
+    public String ordenes(Model model) {
+        model.addAttribute("listaOrden", ordenService.findAll());
+        return "admin/ordenes";
     }
 }
