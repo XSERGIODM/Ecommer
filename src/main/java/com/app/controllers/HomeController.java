@@ -4,6 +4,7 @@ import com.app.models.DetalleOrden;
 import com.app.models.Orden;
 import com.app.models.Producto;
 import com.app.services.IProductoService;
+import com.app.services.IUsuarioService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +22,13 @@ import java.util.List;
 public class HomeController {
 
     final IProductoService productoService;
+    final IUsuarioService usuarioService;
     List<DetalleOrden> detalleOrdenList = new ArrayList<>();
     final Orden orden = new Orden();
 
-    public HomeController(IProductoService productoService) {
+    public HomeController(IProductoService productoService, IUsuarioService usuarioService) {
         this.productoService = productoService;
+        this.usuarioService = usuarioService;
         orden.setTotal(0.0);
     }
 
@@ -69,9 +72,10 @@ public class HomeController {
     }
 
     @GetMapping("/order")
-    public String order(Model model){
+    public String order(Model model) {
         model.addAttribute("listaDetalleOrden", detalleOrdenList);
         model.addAttribute("orden", orden);
+        model.addAttribute("usuario", usuarioService.findById(1).get());
         return "user/resumenOrden";
     }
 
