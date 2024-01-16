@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,5 +31,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
     public Optional<Usuario> findByEmailIgnoreCase(String email) {
         return usuarioRepository.findByEmailIgnoreCase(email);
+    }
+
+    @Override
+    public List<Usuario> findAll() {
+        return usuarioRepository.findAll();
     }
 }

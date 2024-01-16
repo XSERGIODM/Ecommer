@@ -1,6 +1,7 @@
 package com.app.controllers;
 
 import com.app.services.IProductoService;
+import com.app.services.IUsuarioService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,10 +19,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdministradorController {
 
     IProductoService productoService;
+    IUsuarioService usuarioService;
 
     @GetMapping("")
     public String home(Model model) {
         model.addAttribute("listaProducto", productoService.findAll());
         return "admin/home";
+    }
+
+    @GetMapping("/usuarios")
+    public String usuarios(Model model) {
+        model.addAttribute("listaUsuario", usuarioService.findAll());
+        return "admin/usuarios";
     }
 }
