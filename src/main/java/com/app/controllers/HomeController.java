@@ -61,6 +61,13 @@ public class HomeController {
         return "user/carrito";
     }
 
+    @GetMapping("/getCart")
+    public String getCart(Model model) {
+        model.addAttribute("listaDetalleOrden", detalleOrdenList);
+        model.addAttribute("orden", orden);
+        return "user/carrito";
+    }
+
     @PostMapping("/cart")
     public String addCart(@RequestParam Integer id, @RequestParam Integer cantidad, Model model) {
         DetalleOrden detalleOrden = new DetalleOrden();
@@ -73,7 +80,11 @@ public class HomeController {
         detalleOrden.setTotal(producto.getPrecio() * cantidad);
         detalleOrden.setProducto(producto);
 
-        detalleOrdenList.add(detalleOrden);
+        // Validar si el producto ya existe en la lista, no se debe agregar
+        if (detalleOrdenList.stream().noneMatch(detalle -> detalle.getProducto().getId().equals(producto.getId()))) {
+            detalleOrdenList.add(detalleOrden);
+        }
+
         sumaTotal = detalleOrdenList.stream().mapToDouble(DetalleOrden::getTotal).sum();
 
         orden.setTotal(sumaTotal);
