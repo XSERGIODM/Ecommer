@@ -40,7 +40,7 @@ public class OrdenServiceImpl implements IOrdenService {
         }else {
             numero = 1;
         }
-        numeroConcatenado = String.format("%10d", numero);
+        numeroConcatenado = String.format("%010d", numero);
         return numeroConcatenado;
     }
 }
