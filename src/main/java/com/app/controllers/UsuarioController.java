@@ -10,10 +10,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -43,6 +40,13 @@ public class UsuarioController {
         model.addAttribute("sessionModel", session.getAttribute("usuarioId"));
         return "user/compras";
     }
+    @GetMapping("/detallesCompras/{id}")
+    public String detallesCompras(HttpSession session, Model model, @PathVariable(name = "id") Integer id){
+        model.addAttribute("listaDetallesCompras", ordenService.findById(id).get().getDetalleOrden());
+        model.addAttribute("sessionModel", session.getAttribute("usuarioId"));
+        return "user/detalleCompra";
+    }
+
 
     @PostMapping("/save")
     public String save(Usuario usuario){

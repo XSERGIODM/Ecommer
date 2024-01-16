@@ -57,7 +57,7 @@
                   <td th:text="${orden.getNumero()}"></td>
                   <td th:text="${orden.getFechaCreacion()}"></td>
                   <td th:text="'$'+${#numbers.formatDecimal(orden.getTotal(), 1, 'COMMA', 2, 'POINT')}"></td>
-                  <td><a href="detallecompra.html" class="btn btn-success">Ver Detalle</a></td>
+                  <td><a th:href="@{/usuario/detallesCompras/{id} (id=${orden.getId()})}" class="btn btn-success">Ver Detalle</a></td>
                 </tr>
               </tbody>
             </table>

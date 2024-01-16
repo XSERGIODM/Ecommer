@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -47,5 +48,10 @@ public class OrdenServiceImpl implements IOrdenService {
     @Override
     public List<Orden> findByUsuario_Id(Integer id) {
         return ordenRepository.findByUsuario_Id(id);
+    }
+
+    @Override
+    public Optional<Orden> findById(Integer id) {
+        return ordenRepository.findById(id);
     }
 }
