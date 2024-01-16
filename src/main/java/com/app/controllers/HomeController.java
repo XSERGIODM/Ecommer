@@ -18,13 +18,17 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 @Slf4j
-@AllArgsConstructor
-@FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class HomeController {
 
-    IProductoService productoService;
+    final IProductoService productoService;
     List<DetalleOrden> detalleOrdenList = new ArrayList<>();
-    Orden orden = new Orden();
+    final Orden orden = new Orden();
+
+    public HomeController(IProductoService productoService) {
+        this.productoService = productoService;
+    }
+
 
     @GetMapping("")
     public String home(Model model) {
@@ -36,6 +40,25 @@ public class HomeController {
     public String productoHome(@PathVariable(value = "id") Integer id, Model model) {
         model.addAttribute("producto", productoService.findById(id).get());
         return "user/productoHome";
+    }
+
+    @GetMapping("/delete/cart/{id}")
+    public String deleteProductCart(@PathVariable(value = "id") Integer id, Model model) {
+        List<DetalleOrden> detalleOrdenListTemp = new ArrayList<>();
+
+        detalleOrdenList.forEach(detalleOrden -> {
+            if (!detalleOrden.getProducto().getId().equals(id)) {
+                detalleOrdenListTemp.add(detalleOrden);
+            }
+        });
+
+        detalleOrdenList = detalleOrdenListTemp;
+        double sumaTotal = detalleOrdenList.stream().mapToDouble(DetalleOrden::getTotal).sum();
+        orden.setTotal(sumaTotal);
+
+        model.addAttribute("listaDetalleOrden", detalleOrdenList);
+        model.addAttribute("orden", orden);
+        return "user/carrito";
     }
 
     @PostMapping("/cart")

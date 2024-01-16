@@ -55,12 +55,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="producto:${listaDetalleOrden}">
-                            <td th:text="${producto.getNombre()}"></td>
-                            <td th:text="'$'+${#numbers.formatDecimal(producto.getPrecio(), 1, 'COMMA', 2, 'POINT')}"></td>
-                            <td th:text="${producto.getCantidad()}"></td>
-                            <td th:text="'$'+${#numbers.formatDecimal(producto.getTotal(), 1, 'COMMA', 2, 'POINT')}"></td>
-                            <td><a href="#" class="btn btn-danger">Quitar</a></td>
+                        <tr th:each="detalleProducto:${listaDetalleOrden}">
+                            <td th:text="${detalleProducto.getNombre()}"></td>
+                            <td th:text="'$'+${#numbers.formatDecimal(detalleProducto.getPrecio(), 1, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="${detalleProducto.getCantidad()}"></td>
+                            <td th:text="'$'+${#numbers.formatDecimal(detalleProducto.getTotal(), 1, 'COMMA', 2, 'POINT')}"></td>
+                            <td><a th:href="@{/delete/cart/{id} (id=${detalleProducto.getProducto.getId()})}" class="btn btn-danger">Quitar</a></td>
                         </tr>
                         </tbody>
                     </table>
