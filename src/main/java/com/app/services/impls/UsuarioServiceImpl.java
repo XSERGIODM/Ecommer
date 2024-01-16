@@ -1,7 +1,8 @@
-package com.app.services;
+package com.app.services.impls;
 
 import com.app.models.Usuario;
 import com.app.repositories.IUsuarioRepository;
+import com.app.services.IUsuarioService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -12,7 +13,7 @@ import java.util.Optional;
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class UsuarioServiceImpl implements IUsuarioService{
+public class UsuarioServiceImpl implements IUsuarioService {
 
     IUsuarioRepository IUsuarioRepository;
 

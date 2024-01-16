@@ -1,7 +1,8 @@
-package com.app.services;
+package com.app.services.impls;
 
 import com.app.models.Producto;
 import com.app.repositories.IProductoRepository;
+import com.app.services.IProductoService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,7 +14,7 @@ import java.util.Optional;
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class ProductoServiceImpl implements IProductoService{
+public class ProductoServiceImpl implements IProductoService {
 
     IProductoRepository IProductoRepository;
 
