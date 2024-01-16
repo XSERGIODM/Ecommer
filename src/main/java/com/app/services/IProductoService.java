@@ -11,4 +11,5 @@ public interface IProductoService {
     void update(Producto producto);
     void delete(Integer id);
     List<Producto> findAll();
+    List<Producto> findByNombreContainsIgnoreCase(String nombre);
 }

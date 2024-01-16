@@ -138,4 +138,12 @@ public class HomeController {
         return "user/carrito";
     }
 
+    @PostMapping("/searchProduct")
+    public String searchProduct(@RequestParam String nombre , Model model) {
+        log.info("Nombre: " + nombre);
+        List<Producto> listaProducto = productoService.findByNombreContainsIgnoreCase(nombre);
+        model.addAttribute("listaProducto", listaProducto);
+        return "user/home";
+    }
+
 }

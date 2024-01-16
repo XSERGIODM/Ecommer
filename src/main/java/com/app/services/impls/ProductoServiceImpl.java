@@ -42,4 +42,11 @@ public class ProductoServiceImpl implements IProductoService {
     public List<Producto> findAll() {
         return IProductoRepository.findAll();
     }
+
+    @Override
+    public List<Producto> findByNombreContainsIgnoreCase(String nombre) {
+        return IProductoRepository.findByNombreContainsIgnoreCase(nombre);
+    }
+
+
 }
