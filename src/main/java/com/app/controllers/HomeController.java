@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
 @Slf4j
 @AllArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
 public class HomeController {
 
     IProductoService productoService;
@@ -40,13 +39,25 @@ public class HomeController {
     }
 
     @PostMapping("/cart")
-    public String addCart(@RequestParam Integer id, @RequestParam Integer cantidad) {
+    public String addCart(@RequestParam Integer id, @RequestParam Integer cantidad, Model model) {
         DetalleOrden detalleOrden = new DetalleOrden();
-        Producto producto = new Producto();
+        Producto producto = productoService.findById(id).get();
         double sumaTotal = 0;
-        Optional<Producto> optionalProducto = productoService.findById(id);
-        log.info("Producto añadido: {}", optionalProducto.get());
-        log.info("Cantidad: {}", cantidad);
+
+        detalleOrden.setCantidad(cantidad);
+        detalleOrden.setPrecio(producto.getPrecio());
+        detalleOrden.setNombre(producto.getNombre());
+        detalleOrden.setTotal(producto.getPrecio() * cantidad);
+        detalleOrden.setProducto(producto);
+
+        detalleOrdenList.add(detalleOrden);
+        sumaTotal = detalleOrdenList.stream().mapToDouble(DetalleOrden::getTotal).sum();
+
+        orden.setTotal(sumaTotal);
+
+        model.addAttribute("listaDetalleOrden", detalleOrdenList);
+        model.addAttribute("orden", orden);
+
 
         return "user/carrito";
     }
