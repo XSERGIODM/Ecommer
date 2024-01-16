@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,9 +26,7 @@ public class Orden {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @ToString.Exclude
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "detalle_orden_id", unique = true)
-    private DetalleOrden detalleOrden;
+    @OneToMany(mappedBy = "orden", orphanRemoval = true)
+    private List<DetalleOrden> detalleOrden;
 
 }

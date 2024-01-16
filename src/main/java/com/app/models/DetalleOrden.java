@@ -23,8 +23,8 @@ public class DetalleOrden {
     @JoinColumn(name = "producto_id")
     private Producto producto;
 
-    @ToString.Exclude
-    @OneToOne(mappedBy = "detalleOrden", orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "orden_id")
     private Orden orden;
 
 }
