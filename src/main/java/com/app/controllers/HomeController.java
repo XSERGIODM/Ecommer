@@ -5,7 +5,6 @@ import com.app.models.Orden;
 import com.app.models.Producto;
 import com.app.services.IProductoService;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -27,6 +26,7 @@ public class HomeController {
 
     public HomeController(IProductoService productoService) {
         this.productoService = productoService;
+        orden.setTotal(0.0);
     }
 
 
@@ -66,6 +66,13 @@ public class HomeController {
         model.addAttribute("listaDetalleOrden", detalleOrdenList);
         model.addAttribute("orden", orden);
         return "user/carrito";
+    }
+
+    @GetMapping("/order")
+    public String order(Model model){
+        model.addAttribute("listaDetalleOrden", detalleOrdenList);
+        model.addAttribute("orden", orden);
+        return "user/resumenOrden";
     }
 
     @PostMapping("/cart")
