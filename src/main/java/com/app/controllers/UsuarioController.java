@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,58 +24,61 @@ public class UsuarioController {
 
     IUsuarioService usuarioService;
     IOrdenService ordenService;
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/registro")
-    public String registro(){
+    public String registro() {
         return "user/registro";
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "user/login";
     }
 
     @GetMapping("/compras")
-    public String compras(HttpSession session, Model model){
+    public String compras(HttpSession session, Model model) {
         model.addAttribute("listaOrdenes", ordenService.findByUsuario_Id((Integer) session.getAttribute("usuarioId")));
         model.addAttribute("sessionModel", session.getAttribute("usuarioId"));
         return "user/compras";
     }
+
     @GetMapping("/detallesCompras/{id}")
-    public String detallesCompras(HttpSession session, Model model, @PathVariable(name = "id") Integer id){
+    public String detallesCompras(HttpSession session, Model model, @PathVariable(name = "id") Integer id) {
         model.addAttribute("listaDetallesCompras", ordenService.findById(id).get().getDetalleOrden());
         model.addAttribute("sessionModel", session.getAttribute("usuarioId"));
         return "user/detalleCompra";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.removeAttribute("usuarioId");
         session.invalidate();
         return "redirect:/";
     }
 
     @PostMapping("/save")
-    public String save(Usuario usuario){
+    public String save(Usuario usuario) {
         usuario.setTipo("USER");
+        usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
         usuarioService.save(usuario);
-        return "redirect:/";
+        return "redirect:/usuario/login";
     }
 
     @PostMapping("/acceder")
-    public String acceder(Usuario usuario, HttpSession session){
+    public String acceder(Usuario usuario, HttpSession session) {
         Optional<Usuario> optionalUsuario = usuarioService.findByEmailIgnoreCase(usuario.getEmail());
-         if(optionalUsuario.isPresent()){
+        if (optionalUsuario.isPresent()) {
             Usuario usuarioEncontrado = optionalUsuario.get();
             session.setAttribute("usuarioId", usuarioEncontrado.getId());
-            if(usuarioEncontrado.getTipo().equals("ADMIN")){
+            if (usuarioEncontrado.getTipo().equals("ADMIN")) {
                 log.info("Acceso: {}", usuarioEncontrado);
                 return "redirect:/administrador";
-            }else{
+            } else {
                 log.info("Acceso: {}", usuarioEncontrado);
                 return "redirect:/";
             }
-        }else {
+        } else {
             log.info("Usuario no encontrado");
             return "redirect:/usuario/login";
         }
