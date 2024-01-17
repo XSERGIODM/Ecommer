@@ -3,8 +3,10 @@ package com.app.security;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
@@ -19,7 +21,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @AllArgsConstructor
 public class SpringBootSecurity {
 
+
     UserDetailsService userDetailsService;
+    BCryptPasswordEncoder passwordEncoder;
+
+
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -33,15 +43,19 @@ public class SpringBootSecurity {
                             .anyRequest().permitAll();
                 })
                 .formLogin(form -> {
-                    form.loginPage("/usuario/registro").permitAll();
-                    form.loginPage("/usuario/login");
+                    form
+                            .loginPage("/usuario/login")
+                            .defaultSuccessUrl("/usuario/acceder")
+                            .permitAll()
+                            .defaultSuccessUrl("/usuario/acceder");
                 })
                 .sessionManagement(sesionManager -> {
-                    sesionManager.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-                    sesionManager.invalidSessionUrl("/usuario/login");
-                    sesionManager.maximumSessions(1);
-                    sesionManager.sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession);
-                    sesionManager.sessionAuthenticationErrorUrl("/usuario/login");
+                    sesionManager
+                            .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                            .invalidSessionUrl("/usuario/login")
+                            .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession)
+                            .sessionAuthenticationErrorUrl("/usuario/login")
+                            .maximumSessions(1);
                 })
                 .build();
     }

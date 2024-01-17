@@ -1,6 +1,7 @@
 package com.app.controllers;
 
 import com.app.models.Usuario;
+import com.app.security.SpringBootSecurity;
 import com.app.services.IOrdenService;
 import com.app.services.IUsuarioService;
 import jakarta.servlet.http.HttpSession;
@@ -8,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +21,12 @@ import java.util.Optional;
 @RequestMapping("/usuario")
 @Slf4j
 @AllArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@FieldDefaults( makeFinal = true,level = AccessLevel.PRIVATE)
 public class UsuarioController {
 
     IUsuarioService usuarioService;
     IOrdenService ordenService;
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/registro")
     public String registro() {
@@ -33,6 +35,10 @@ public class UsuarioController {
 
     @GetMapping("/login")
     public String login() {
+        return "user/login";
+    }
+    @PostMapping("/login")
+    public String loginn() {
         return "user/login";
     }
 
@@ -60,14 +66,15 @@ public class UsuarioController {
     @PostMapping("/save")
     public String save(Usuario usuario) {
         usuario.setTipo("USER");
-        usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         usuarioService.save(usuario);
         return "redirect:/usuario/login";
     }
 
-    @PostMapping("/acceder")
+    @GetMapping("/acceder")
     public String acceder(Usuario usuario, HttpSession session) {
-        Optional<Usuario> optionalUsuario = usuarioService.findByEmailIgnoreCase(usuario.getEmail());
+        int id = (Integer) session.getAttribute("usuarioId");
+        Optional<Usuario> optionalUsuario = usuarioService.findById(id);
         if (optionalUsuario.isPresent()) {
             Usuario usuarioEncontrado = optionalUsuario.get();
             session.setAttribute("usuarioId", usuarioEncontrado.getId());
