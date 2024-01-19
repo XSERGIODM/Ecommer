@@ -38,8 +38,8 @@ public class SpringBootSecurity {
                     auth
                             .requestMatchers("/administrador/**").hasRole("ADMIN")
                             .requestMatchers("/productos/**").hasRole("ADMIN")
-                            .requestMatchers("/order").hasRole("USER")
-                            .requestMatchers("/saveOrder").hasRole("USER")
+                            .requestMatchers("/order").hasAnyRole("USER", "ADMIN")
+                            .requestMatchers("/saveOrder").hasAnyRole("USER", "ADMIN")
                             .anyRequest().permitAll();
                 })
                 .formLogin(form -> {
